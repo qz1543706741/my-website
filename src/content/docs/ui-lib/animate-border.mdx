@@ -1,0 +1,45 @@
+---
+title: 渐变动画边框
+description: 渐变动画边框
+---
+
+import { AnimationBorder } from '@/components/AnimationBorder';
+
+## 参数类型定义
+
+```typescript
+export type AnimationBorderProps = {
+  borderSize: string;
+  borderRadius: string;
+  paused: boolean;
+  duration: string;
+  whilePausedShow?: boolean;
+};
+```
+
+## 使用
+
+```jsx
+<AnimationBorder
+  borderSize="5px"
+  borderRadius="1.5rem"
+  paused={false}
+  duration="4000ms"
+  whilePausedShow={false}
+>
+  <div className="flex h-24 w-full items-center justify-center">123465</div>
+</AnimationBorder>
+```
+
+<div className="pt-4">
+  <AnimationBorder
+    borderSize="5px"
+    borderRadius="1.5rem"
+    paused={false}
+    duration="4000ms"
+    whilePausedShow={false}
+    client:visible
+  >
+    <div className="flex h-24 w-full items-center justify-center">123465</div>
+  </AnimationBorder>
+</div>

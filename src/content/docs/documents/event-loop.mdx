@@ -1,0 +1,170 @@
+---
+title: 事件循环
+description: 事件循环介绍
+---
+
+import { ShowResult } from '@/components/ShowResult';
+import { Button } from '@/components/Button';
+
+```javascript
+console.log(1);
+console.log(2);
+Promise.resolve().then(function () {
+  console.log(3);
+});
+setTimeout(function () {
+  console.log('setTimeout1');
+  Promise.resolve().then(function () {
+    console.log('promise');
+  });
+});
+setTimeout(function () {
+  console.log('setTimeout2');
+});
+```
+
+<ShowResult
+  client:visible
+  result={`console.log('1');
+console.log('2');
+console.log('3');
+console.log('setTimeout1');
+console.log('promise');
+console.log('setTimeout2'); 
+`}
+/>
+
+```javascript
+async function async1() {
+  console.log('a');
+  await async2();
+  console.log('b');
+}
+
+async function async2() {
+  console.log('c');
+}
+
+console.log('d');
+async1();
+
+setTimeout(() => {
+  console.log('e');
+}, 0);
+
+new Promise((resolve, reject) => {
+  console.log('f');
+  resolve();
+}).then(() => {
+  console.log('g');
+});
+```
+
+<ShowResult
+  client:visible
+  result={`console.log('d');
+console.log('a');
+console.log('c');
+console.log('f');
+console.log('b');
+console.log('g');
+console.log('e');
+`}
+/>
+
+## await 对执行过程的影响
+
+- 当函数执行到 await 时，被等待的表达式会立即执行，所有依赖该表达式的值的代码会被暂停，并推送进微任务队列（microtask queue），后面的代码就会**整体**被安排进一个新的微任务（此后的函数体变为异步执行）。
+- 然后主线程被释放出来，用于事件循环中的下一个任务。
+- 即使等待的值是已经敲定的 promise 或不是 promise，也会发生这种情况。
+
+```javascript
+setTimeout(() => {
+  console.log(1);
+}, 0);
+
+new Promise((resolve) => {
+  console.log(2);
+  resolve();
+  console.log(3);
+}).then(() => {
+  console.log(4);
+});
+
+const promise2 = new Promise(async (resolve) => {
+  console.log(await resolve(5));
+  console.log(6);
+  console.log(7);
+});
+
+async function test() {
+  console.log(8);
+  console.log(await promise2);
+  console.log(9);
+}
+
+test();
+console.log(10);
+```
+
+<ShowResult
+  client:visible
+  result={`console.log('2');
+console.log('3');
+console.log('8');
+console.log('10');
+console.log('4');
+console.log(undefined);
+console.log(6);
+console.error(7);
+console.error(5);
+console.error(9);
+console.error(1);`}
+/>
+
+```javascript
+const p1 = async () => {
+  console.log('p1');
+  const r = await Promise.resolve(1);
+  console.log('p1-1');
+  return r;
+};
+
+const p2 = async () => {
+  console.log('p2');
+  return await Promise.resolve(2);
+};
+
+const p3 = async () => {
+  console.log('p3');
+  return await Promise.reject(3);
+};
+
+const p4 = async () => {
+  console.log('p4');
+  return await Promise.reject(4);
+};
+
+const promises = [p1, p2, p3, p4].map((p) => {
+  return p()
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+});
+```
+
+<ShowResult
+  client:visible
+  result={`console.log('p1');
+console.log('p2');
+console.log('p3');
+console.log('p4');
+console.log('p1-1');
+console.log(1);
+console.log(2);
+console.error(3);
+console.error(4);`}
+/>

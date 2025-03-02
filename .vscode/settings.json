@@ -1,0 +1,18 @@
+{
+  "cSpell.words": ["docusaurus", "dracula", "xiaomi"],
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "editor.formatOnSave": true,
+  "editor.quickSuggestions": {
+    "strings": "on"
+  },
+  "eslint.useFlatConfig": true,
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "emmet.includeLanguages": {
+    "mdx": "html" // 允许在 MDX 中使用 Emmet 缩写
+  },
+  "files.associations": {
+    "*.css": "tailwindcss"
+  }
+}
