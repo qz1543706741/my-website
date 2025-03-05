@@ -1,16 +1,20 @@
-@import 'tailwindcss';
+@layer theme, base, components, utilities;
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities);
 @config "../../tailwind.config.js";
 
 :root {
   color-scheme: light dark;
   font-synthesis: none;
-  font-size: 16px;
-  line-height: 1.5;
-  font-weight: 400;
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
   -webkit-user-drag: none;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+}
+
+ol,
+ul {
+  padding-inline-start: 1em;
 }

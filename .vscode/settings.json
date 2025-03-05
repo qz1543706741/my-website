@@ -1,5 +1,5 @@
 {
-  "cSpell.words": ["docusaurus", "dracula", "xiaomi"],
+  "cSpell.words": ["astrojs", "docusaurus", "dracula", "xiaomi"],
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   },

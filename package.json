@@ -2,6 +2,7 @@
   "name": "my-website",
   "version": "0.0.1",
   "type": "module",
+  "license": "MIT",
   "scripts": {
     "astro": "astro",
     "build": "astro build",
@@ -11,17 +12,18 @@
     "start": "astro dev"
   },
   "dependencies": {
-    "@astrojs/mdx": "^4.1.0",
-    "@astrojs/react": "^4.2.1",
-    "@astrojs/starlight": "^0.32.2",
     "astro": "^5.4.1",
     "clsx": "^2.1.1",
     "motion": "^12.4.7",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-pdf": "^9.2.1",
     "sharp": "^0.32.6"
   },
   "devDependencies": {
+    "@astrojs/mdx": "^4.1.0",
+    "@astrojs/react": "^4.2.1",
+    "@astrojs/starlight": "^0.32.2",
     "@eslint/js": "^9.21.0",
     "@svgr/plugin-jsx": "^8.1.0",
     "@svgr/plugin-svgo": "^8.1.0",
@@ -50,6 +52,7 @@
   },
   "pnpm": {
     "onlyBuiltDependencies": [
+      "canvas",
       "esbuild",
       "sharp"
     ]

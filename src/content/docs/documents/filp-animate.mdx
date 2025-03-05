@@ -1,0 +1,21 @@
+---
+title: FLIP 动画
+---
+
+import { Flip } from '@/components/Flip';
+
+## 什么是 FLIP 动画
+
+FLIP代表First和Last以及Invert还有Play四个单词的组合。
+
+- **First** 初始状态
+- **Last** 最终状态
+- **Invert** 回到初始状态
+- **Play** 执行动画
+
+<Flip client:idle />
+
+## 原理
+
+1. 记录目标元素开始和结束位置信息，在下一帧页面渲染前添加动画。
+2. 事实上每一次 UI 视图更新都会提前清空当前任务队列中的微任务和执行`requestAnimationFrame`回调

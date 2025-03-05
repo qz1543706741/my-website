@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="root" class="wrapper">
+      <section class="header">
+        <div class="logo"></div>
+      </section>
+      <section class="main">
+        <div class="sidebar">
+          <ul class="menu">
+            <li class="li">
+              <a href="" id="demo">li1-a</a>
+            </li>
+            <li class="li">
+              <a href="">li2</a>
+            </li>
+          </ul>
+        </div>
+      </section>
+      <section class="footer">
+        <div class="copyright"></div>
+        <div class="copyright1"></div>
+      </section>
+    </div>
+  </body>
+
+  <script lang="javascript">
+    const el = window.document.getElementById('root');
+    const nodeList = Array.from(el.children);
+
+    // 使用dfs
+
+    function dfs(el) {
+      console.log(el);
+      if (el.children.length === 0) return;
+      Array.from(el.children).forEach(dfs);
+    }
+
+    dfs(el);
+
+    // 循环
+    while (nodeList.length > 0) {
+      const el = nodeList.shift();
+      console.log(el);
+      nodeList.push(...el.children);
+    }
+  </script>
+</html>

@@ -1,3 +1,12 @@
 ---
 title: 我的主页面
 ---
+
+import { PdfViewer } from '@/components/PdfViewer';
+
+<PdfViewer
+  client:only
+  src="/秦振简历-社招.pdf"
+  className="box-border h-screen w-full overflow-auto bg-white p-0 dark:bg-black"
+/>
+;

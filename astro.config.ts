@@ -44,7 +44,6 @@ export default defineConfig({
   ],
   vite: {
     plugins: [
-      tailwindcss(),
       svgr({
         include: _resolve('./src/assets/*.svg?react'),
         svgrOptions: {
@@ -54,6 +53,7 @@ export default defineConfig({
           },
         },
       }),
+      tailwindcss(),
     ],
     resolve: {
       alias: {
