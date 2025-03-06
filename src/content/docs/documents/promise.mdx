@@ -1,16 +1,21 @@
 ---
-title: Promise
+title: 手写 Promise
 description: 手写 Promise
 ---
 
 import { Code } from '@astrojs/starlight/components';
+import myPromise from '@/scripts/my-promise?raw';
 import promiseAll from '@/scripts/promise-all.ts?raw';
 import promiseAllSettled from '@/scripts/promise-all-settled.ts?raw';
 
-## 手写 Promise.all
+## promise
+
+<Code code={myPromise} lang="typescript" />
+
+## Promise.all
 
 <Code code={promiseAll} lang="typescript" />
 
-## 手写 Promise.allSettled
+## Promise.allSettled
 
 <Code code={promiseAllSettled} lang="typescript" />

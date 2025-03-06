@@ -1,0 +1,36 @@
+---
+title: Typescript 类型安全
+---
+
+## 协变与逆变
+
+- 协变： 允许子类型转换为父类型
+
+- 逆变： 允许父类型转换为子类型
+
+通俗点就是说：`父类型变量 = 子类型变量`
+
+举个例子：
+
+```typescript
+interface Animal {
+  age: number;
+}
+
+interface Dog extends Animal {
+  bark: () => void;
+}
+
+const animal: Animal = { age: 12 };
+
+const dog: Dog = {
+  age: 12,
+  bark: () => {},
+};
+
+// 兼容，能赋值成功，这就是一个协变
+animal = dog;
+
+// 不兼容，会抛出类型错误：Property 'bark' is missing in type 'Animal' but required in type 'Dog'
+dog = animal;
+```
