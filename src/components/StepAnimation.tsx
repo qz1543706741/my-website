@@ -1,4 +1,4 @@
-import { startTransition, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { Button } from './Button';
 

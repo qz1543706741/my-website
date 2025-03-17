@@ -5,19 +5,17 @@ import type {
   HTMLProps,
 } from 'react';
 
+import type { AstroClientDirectives } from '../node_modules/astro/dist/types/public/elements';
+
 global {
-  export type PropsWithClassName<P = unknown> = P & {
-    className?: HTMLProps<HTMLElement>['className'];
-  };
-
-  export type PropsWithStyle<P = unknown> = P & {
-    style?: CSSProperties;
-  };
-
-  export type PropsWithCustomStyle<P = unknown> = P & {
+  export type PropsWithClass<P = object> = {
     className?: HTMLProps<HTMLElement>['className'];
     style?: CSSProperties;
-  };
+  } & P;
+
+  export type ClientComponent<P = object> = FunctionComponent<
+    AstroClientDirectives & PropsWithClass<P>
+  >;
 
   export type DEPLOY_ENVIRONMENT = 'development' | 'production' | 'preview';
 

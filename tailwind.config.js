@@ -1,5 +1,6 @@
 import defaultTheme from 'tailwindcss/defaultTheme';
 import plugin from 'tailwindcss/plugin';
+import scrollbarHide from 'tailwind-scrollbar-hide';
 
 const EXTEND_COLORS = {
   'blue-primary': '#0D84FF',
@@ -7,7 +8,7 @@ const EXTEND_COLORS = {
 
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx,mdx}'],
+  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx,mdx,astro}'],
   theme: {
     fontFamily: {
       sans: ['MiSans', 'system-ui', 'sans-serif'],
@@ -20,7 +21,8 @@ export default {
     },
   },
   plugins: [
-    plugin(({ addComponents, theme, matchComponents, addBase }) => {
+    scrollbarHide,
+    plugin(({ addComponents, matchComponents }) => {
       const animateButtonComponent = {
         transitionProperty: defaultTheme.transitionProperty.transform,
         transitionTimingFunction:

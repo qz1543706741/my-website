@@ -4,30 +4,17 @@ import { resolve } from 'node:path';
 import mdx from '@astrojs/mdx';
 import react from '@astrojs/react';
 import starlight from '@astrojs/starlight';
-import type { StarlightUserConfig } from '@astrojs/starlight/types';
 import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'astro/config';
 import svgr from 'vite-plugin-svgr';
 
-const _resolve = (...args: string[]) => resolve(import.meta.dirname, ...args);
-
-const sidebar: StarlightUserConfig['sidebar'] = [
-  {
-    label: '文档',
-    autogenerate: { directory: 'documents' },
-  },
-  {
-    label: '组件',
-    autogenerate: { directory: 'ui-lib' },
-  },
-];
+import { sidebarPlugin } from './plugins/sidebar-plugin';
 
 // https://astro.build/config
 export default defineConfig({
   integrations: [
     starlight({
       title: '秦振的文档',
-      sidebar,
       customCss: [_resolve('./src/styles/global.css')],
       expressiveCode: {
         themes: ['github-dark'],
@@ -37,6 +24,11 @@ export default defineConfig({
             shadowColor: '#124',
           },
         },
+      },
+      plugins: [sidebarPlugin],
+      components: {
+        Header: _resolve('./src/astro-components/Header.astro'),
+        Sidebar: _resolve('./src/astro-components/Sidebar.astro'),
       },
     }),
     mdx(),
@@ -62,4 +54,11 @@ export default defineConfig({
     },
   },
   site: 'https://www.my-site.dev',
+  server: {
+    host: true,
+  },
 });
+
+function _resolve(...args: string[]): string {
+  return resolve(import.meta.dirname, ...args);
+}

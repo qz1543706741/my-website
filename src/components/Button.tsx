@@ -1,14 +1,13 @@
 import clsx from 'clsx';
 import { motion, type MotionProps } from 'motion/react';
-import type { FC, MouseEventHandler, PropsWithChildren } from 'react';
+import type { MouseEventHandler } from 'react';
 
-export type ButtonProps = PropsWithClassName<{
+export type ButtonProps = {
   disabled?: boolean;
   onClick?: MouseEventHandler<HTMLDivElement>;
-}> &
-  MotionProps;
+} & MotionProps;
 
-export const Button: FC<PropsWithChildren<ButtonProps>> = ({
+export const Button: ClientComponent<ButtonProps> = ({
   children,
   disabled,
   onClick,

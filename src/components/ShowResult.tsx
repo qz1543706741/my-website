@@ -1,10 +1,10 @@
-import { type FC, useState } from 'react';
+import { useState } from 'react';
 
 import Close from '@/assets/close.svg?react';
 
 import { Button } from './Button';
 
-export const ShowResult: FC<{
+export const ShowResult: ClientComponent<{
   defaultShow?: boolean;
   result: string;
 }> = ({ defaultShow, result }) => {

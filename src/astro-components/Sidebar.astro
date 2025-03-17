@@ -1,0 +1,23 @@
+---
+import { isCurrentPage } from '@/utils/navigator';
+import MobileMenuFooter from '@astrojs/starlight/components/MobileMenuFooter.astro';
+import SidebarPersister from '@astrojs/starlight/components/SidebarPersister.astro';
+import SidebarSublist from '@astrojs/starlight/components/SidebarSublist.astro';
+
+const { sidebar, id } = Astro.locals.starlightRoute;
+---
+
+<SidebarPersister {...Astro.props}>
+  <SidebarSublist
+    sublist={(() => {
+      const filterMap = sidebar.filter((i) => {
+        return i.type === 'group' && isCurrentPage(id, i.label);
+      });
+      return filterMap[0]?.type === 'group' ? filterMap[0].entries : filterMap;
+    })()}
+  />
+</SidebarPersister>
+
+<div class="md:sl-hidden">
+  <MobileMenuFooter {...Astro.props} />
+</div>

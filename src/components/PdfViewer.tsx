@@ -1,7 +1,7 @@
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 
-import { type FC, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
 
 import LoadingDark from '@/assets/loading-dark.svg?react';
@@ -13,10 +13,10 @@ const options = {
   standardFontDataUrl: '/standard_fonts/',
 };
 
-export const PdfViewer: FC<{ src: string; className?: string }> = ({
-  src,
-  className,
-}) => {
+export const PdfViewer: ClientComponent<{
+  src: string;
+  className?: string;
+}> = ({ src, className }) => {
   const [numPages, setNumPages] = useState<number>();
 
   const documentRef = useRef<HTMLDivElement | null>(null);

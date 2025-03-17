@@ -1,26 +1,19 @@
 'use client';
 
 import clsx from 'clsx';
-import {
-  type FC,
-  type PropsWithChildren,
-  useLayoutEffect,
-  useRef,
-} from 'react';
+import { type PropsWithChildren, useLayoutEffect, useRef } from 'react';
 
 import styles from './style.module.css';
 
-export type AnimationBorderProps = {
+export type AnimationBorderProps = PropsWithChildren<{
   borderSize: string;
   borderRadius: string;
   paused: boolean;
   duration: string;
   whilePausedShow?: boolean;
-};
+}>;
 
-export const AnimationBorder: FC<
-  PropsWithClassName<PropsWithChildren<AnimationBorderProps>>
-> = ({
+export const AnimationBorder: ClientComponent<AnimationBorderProps> = ({
   borderSize,
   borderRadius,
   className,

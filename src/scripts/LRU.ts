@@ -1,10 +1,10 @@
-class LRU {
+export class LRU {
   constructor(
     public maxSize: number,
     private map = new Map(),
   ) {}
 
-  set(key, value) {
+  set(key: unknown, value: unknown) {
     if (this.map.size < this.maxSize - 1) {
       this.map.set(key, value);
       return;
@@ -14,7 +14,7 @@ class LRU {
     this.map.set(key, value);
   }
 
-  get(key) {
+  get(key: unknown) {
     if (this.map.has(key)) {
       const value = this.map.get(key);
 

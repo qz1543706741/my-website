@@ -1,17 +1,19 @@
 import js from '@eslint/js';
-import globals from 'globals';
+import eslintPluginAstro from 'eslint-plugin-astro';
+import * as mdx from 'eslint-plugin-mdx';
+import eslintMdxParser from 'eslint-mdx';
+import reactPlugin from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
-import tseslint from 'typescript-eslint';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
-import reactPlugin from 'eslint-plugin-react';
-import * as mdx from 'eslint-plugin-mdx';
-import eslintPluginAstro from 'eslint-plugin-astro';
+import globals from 'globals';
+import tseslint from 'typescript-eslint';
+
 export default tseslint.config(
   { ignores: ['dist', '.astro'] },
   {
+    files: ['**/*.ts', '**/*.tsx'],
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
-    files: ['**/*.{ts,tsx}'],
     ...reactPlugin.configs.flat.recommended,
     ...reactPlugin.configs.flat['jsx-runtime'],
     languageOptions: {
@@ -42,18 +44,28 @@ export default tseslint.config(
       },
     },
   },
+  // Astro
+  ...eslintPluginAstro.configs.recommended,
   {
     ...mdx.flat,
+    files: ['**/*.mdx'],
+    languageOptions: {
+      parser: eslintMdxParser,
+    },
     // optional, if you want to lint code blocks at the same
     processor: mdx.createRemarkProcessor({
       lintCodeBlocks: true,
       // optional, if you want to disable language mapper, set it to `false`
       // if you want to override the default language mapper inside, you can provide your own
-      languageMapper: {},
+      languageMapper: false,
     }),
   },
   {
     ...mdx.flatCodeBlocks,
+    languageOptions: {
+      parser: eslintMdxParser,
+    },
+    files: ['**/*.mdx'],
     rules: {
       ...mdx.flatCodeBlocks.rules,
       // if you want to override some rules for code blocks
@@ -61,5 +73,4 @@ export default tseslint.config(
       'prefer-const': 'error',
     },
   },
-  ...eslintPluginAstro.configs.recommended,
 );
