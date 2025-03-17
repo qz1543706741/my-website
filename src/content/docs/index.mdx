@@ -6,6 +6,6 @@ import { PdfViewer } from '@/components/PdfViewer';
 
 <PdfViewer
   client:only
-  src="/秦振简历-社招.pdf"
+  src={`${import.meta.env.BASE_URL}/秦振简历-社招.pdf`}
   className="box-border h-screen w-full overflow-auto bg-white p-0 dark:bg-black"
 />

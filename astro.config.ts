@@ -8,10 +8,13 @@ import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'astro/config';
 import svgr from 'vite-plugin-svgr';
 
+import { name } from './package.json';
 import { sidebarPlugin } from './plugins/sidebar-plugin';
 
 // https://astro.build/config
 export default defineConfig({
+  site: 'https://qinzhen.github.io',
+  base: `/${name}`,
   integrations: [
     starlight({
       title: '秦振的文档',
@@ -53,7 +56,6 @@ export default defineConfig({
       },
     },
   },
-  site: 'https://www.my-site.dev',
   server: {
     host: true,
   },

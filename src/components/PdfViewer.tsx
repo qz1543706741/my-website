@@ -17,6 +17,7 @@ export const PdfViewer: ClientComponent<{
   src: string;
   className?: string;
 }> = ({ src, className }) => {
+  console.log(src);
   const [numPages, setNumPages] = useState<number>();
 
   const documentRef = useRef<HTMLDivElement | null>(null);
