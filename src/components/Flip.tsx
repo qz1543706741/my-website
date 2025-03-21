@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import { Button } from './Button';
 
-export const Flip = () => {
+export const Flip: ClientComponent = () => {
   const ref = useRef<HTMLDivElement>(null);
 
   const [list, setList] = useState([

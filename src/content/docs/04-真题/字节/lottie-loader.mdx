@@ -1,0 +1,233 @@
+---
+title: lottie-loader
+---
+
+### 题目描述
+
+有一组 lottie 文件需要播放，请使用JS实现一个加载器 Loader。​
+
+### 详细要求：​
+
+- 加载 lottie 文件，并且依次播放。​
+- 并行加载。为了提高加载速度，所有请求并行加载。由于网络的原因，每个lottie加载完成的时间是不确定的，可能是 3.lottie 比 1.lottie / 2.lottie先加载完成。​
+- 串行执行。按顺序 play()。依次播放 1/2/3/... 文件。​
+- 加载失败重试，重试有间隔。由于网络不稳定可能会加载失败，每个 lottie 加载失败时最多重试 3 次，每次重试之间间隔500ms。​
+
+### 加分要求：​
+
+- 尽早播放。由于lottie文件比较多，为了能更快展示结果，每个 lottie 在前序文件播放完之后即可播放。例如：1.lottie 加载完成后，立即播放，不用等待2.lottie，但 3.lottie 需要等待 2.lottie。​
+- 异常抛出。每个lottie自身重试次数用尽依然无法加载完成，add() 抛出 reject promise。​
+
+完善代码中 Loader 类，使得以下程序能正确输出。​
+
+```javascript
+// 加载器​
+const loader = new Loader({
+  retryMax: 3, // 最多重试 3次​
+  retryDelay: 500, // 每次重试延时 500ms​
+});
+
+// 添加加载任务​
+loader.add('1.lottie');
+loader.add('2-unstable.lottie');
+
+// add() 返回 promise​
+// 加载成功且播放成功时 resolve，加载失败或播放失败时 reject​
+loader.add('3.lottie');
+```
+
+为了方便回答，已经给出部分代码，请完成 TODO 部分（TODO以外的部分也可以适当修改）
+加载 load()和 play() 已经提供，候选人按要求在恰当的时机调用这两个方法就行。​
+
+```javascript
+/**
+ * 异步加载指定的 lottie 文件 URL，并返回文件内容作为字符串。​
+ *
+ * @example​
+ * const lottieConfig = await load("1.lottie"); // 加载 1.lottie 文件并获取其内容​
+ *
+ * @async​
+ * @function load​
+ * @param {string} url - 要加载的 lottie 文件的 URL。​
+ * @returns {Promise<LottieConfig>} 返回文件内容的 Promise。​
+ * @throws {Error} 当网络加载失败时，会抛出错误。​
+ */
+async function load(url) {
+  // 环境提供​
+}
+/**
+ * 播放传入的 lottie config​
+ *
+ * @example​
+ * const result = play(lottieConfig); // 播放 lottieConfig​
+ *
+ * @function play​
+ * @param {LottieConfig} lottieConfig - 要播放的 lottie config。​
+ * @returns {any} 播放结果。​
+ * @throws {Error} 当代码执行失败时，会抛出错误。​
+ */
+function play(lottieConfig) {
+  // 环境提供​
+}
+
+/**
+ * Loader 类用于管理加载任务和重试逻辑。​
+ */
+class Loader {
+  /**
+   * 创建 Loader 实例。​
+   *
+   * @constructor​
+   * @param {Object} options - 配置选项。​
+   * @param {Object} options.retryMax - 最大重试次数。​
+   * @param {number} options.retryDelay - 每次重试的延迟时间（毫秒）。​
+   */
+  constructor({ retryMax, retryDelay }) {
+    this.tasks = []; // 存储待执行的任务队列​
+    this.retryMax = retryMax; // 初始化重试策略​
+    this.retryDelay = retryDelay​
+  }
+  /**
+   * 添加新的加载任务到任务队列。​
+   *
+   * @function add​
+   * @param {string} url - 要加载的 lottie 文件的 URL。​
+   * @returns {Promise<any>} 返回任务的 Promise。​
+   *
+   * @example​
+   * loader.add("1.lottie"); // 将 1.lottie 加入任务队列​
+   */
+  add(url) {
+    return new Promise((resolve, reject) => {
+      const task = {
+        url, // 任务的 URL​
+        resolve,
+        reject,
+        // TODO：可以增加队列任务状态以便于管理​
+      };
+      // 将任务添加到队列​
+      this.tasks.push(task);
+      // TODO：决定何时调用 load() 和 play()
+    });
+  }
+  // TODO：class 剩余部分​
+}
+
+// 创建加载器实例​
+const loader = new Loader({
+    retryMax: 3, // 最多重试 3次​
+    retryDelay: 500, // 每次重试延时 500ms​
+});
+
+// 监听任务的成功和失败​
+loader.add("1.lottie").then(
+  (result) => console.log("[1.lottie] success", result),
+  (error) => console.log("[1.lottie] fail", error)
+);
+loader.add("2-unstable.lottie").then(
+  (result) => console.log("[2.lottie] success", result),
+  (error) => console.log("[2.lottie] fail", error)
+);
+loader.add("3.lottie").then(
+  (result) => console.log("[3.lottie] success", result),
+  (error) => console.log("[3.lottie] fail", error)
+);
+
+
+// ====== 以下不看 =====
+
+async function load(url) {
+  // 模拟网络延迟，随机延迟时间在 0 到 1000 毫秒之间​
+  await new Promise((resolve) => {
+    setTimeout(resolve, Math.random() * 1000);
+  });
+  // 从 URL 中提取开头的数字部分​
+  const prefix = url.match(/^\d/);
+  // 构造 lottie 内容​
+  const lottieConfig = {
+    __LOTTIE_CONFIG__: {
+      id: prefix ? prefix[0] : null,
+      url,
+    },
+  };
+  if (!url.includes("unstable")) {
+    return lottieConfig;
+  }
+  // 模拟网络加载失败​
+  const store = load;
+  store.unstableRequested = (store.unstableRequested || 0) + 1;
+  if (store.unstableRequested < 3) {
+    throw new Error(`[load] 请求 ${url} 失败`);
+  }
+  return lottieConfig;
+}
+function play(lottieConfig) {
+  // 播放 lottie 文件的内容​
+  console.log(`[play] 正在播放: ${lottieConfig.__LOTTIE_CONFIG__.url}`);
+  return `[play] 已播放: ${lottieConfig.__LOTTIE_CONFIG__.url}`
+}
+```
+
+### 实现
+
+```javascript
+class Loader {
+  constructor({ retryMax, retryDelay }) {
+    this.tasks = []; // 任务队列
+    this.currentPlayIndex = 0; // 当前播放索引
+    this.retryMax = retryMax;
+    this.retryDelay = retryDelay;
+  }
+
+  add(url) {
+    return new Promise((resolve, reject) => {
+      const task = {
+        url,
+        resolve,
+        reject,
+        retries: 0,
+        loaded: false,
+        config: null,
+        index: this.tasks.length, // 记录添加顺序
+      };
+      this.tasks.push(task);
+      this.loadWithRetry(task); // 立即启动加载
+    });
+  }
+
+  // 带重试机制的加载逻辑[3](@ref)
+  async loadWithRetry(task) {
+    while (task.retries <= this.retryMax) {
+      try {
+        task.config = await load(task.url);
+        task.loaded = true;
+        this.tryPlaySequence(); // 触发播放检查
+        break;
+      } catch (error) {
+        if (task.retries === this.retryMax) {
+          task.reject(`加载失败：${error.message}`);
+          return;
+        }
+        task.retries++;
+        await new Promise((r) => setTimeout(r, this.retryDelay));
+      }
+    }
+  }
+
+  // 顺序播放控制器[1,3](@ref)
+  tryPlaySequence() {
+    while (this.currentPlayIndex < this.tasks.length) {
+      const currentTask = this.tasks[this.currentPlayIndex];
+      if (!currentTask?.loaded) break; // 未加载完成则终止循环
+
+      try {
+        const result = play(currentTask.config);
+        currentTask.resolve(result); // 播放成功
+      } catch (error) {
+        currentTask.reject(`播放失败：${error.message}`); // 播放失败
+      }
+      this.currentPlayIndex++; // 推进播放指针
+    }
+  }
+}
+```
