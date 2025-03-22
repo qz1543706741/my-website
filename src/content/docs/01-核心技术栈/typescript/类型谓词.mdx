@@ -1,0 +1,51 @@
+---
+title: 类型谓词
+---
+
+## 什么是类型谓词
+
+> [官方文档](https://www.typescriptlang.org/docs/handbook/2/narrowing.html#using-type-predicates)
+
+类型谓词是用于定义一个函数的返回类型的特殊语法，表示该函数会检查一个变量的类型，并返回一个布尔值，告诉 **TypeScript编译器**该变量是否属于某个特定类型。
+
+## 语法
+
+要定义一个用户定义的类型守卫，我们只需要定义一个返回类型为类型守卫的函数, 如果该函数返回 `true`，那么该函数的形参变量就是该类型，否则不是。
+
+```typescript
+function isFish(pet: Fish | Bird): pet is Fish {
+  return (pet as Fish).swim !== undefined;
+}
+```
+
+谓词的形式为 `parameterName is Type`，其中 parameterName 必须是当前函数签名中的一个参数名称。  
+在本例中，`pet is Fish` 就是一个谓词。
+
+## 应用
+
+```typescript
+import { RefObject } from 'react';
+
+type TransformToRef<T extends Element> = RefObject<T | null> | T;
+
+const isRef = (
+  value: TransformToRef<Element>,
+): value is RefObject<Element | null> => {
+  return value !== null && typeof value === 'object' && 'current' in value;
+};
+
+export const delayAction = <
+  R extends Element,
+  T extends () => void = () => void,
+>(
+  cb: T,
+  elOrRef: TransformToRef<R>,
+  eventType: keyof HTMLElementEventMap = 'transitionend',
+) => {
+  if (!isRef(elOrRef)) {
+    elOrRef.addEventListener(eventType, cb, { once: true });
+  } else {
+    elOrRef.current?.addEventListener(eventType, cb, { once: true });
+  }
+};
+```
