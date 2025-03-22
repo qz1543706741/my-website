@@ -31,7 +31,7 @@ const animateDuration = (
   _run();
 };
 
-export const StepAnimation = () => {
+export const StepAnimation: ClientComponent = () => {
   const [time, setTime] = useState(0);
 
   return (

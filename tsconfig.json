@@ -7,10 +7,11 @@
     "jsxImportSource": "react",
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "allowJs": true,
+    "checkJs": true
   },
   "mdx": {
-    // Enable strict type checking in MDX files.
     "checkMdx": true
   }
 }

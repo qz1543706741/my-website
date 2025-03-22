@@ -1,0 +1,107 @@
+---
+title: 消除异步函数的传染性
+---
+
+import { ShowResult } from '@/components/ShowResult';
+
+## 为啥要学这个
+
+先看看这个例子：
+
+```javascript
+function ArtistPage({ artist }) {
+  return (
+    <Suspense fallback={<h2>🌀 Loading...</h2>}>
+      <Albums artistId={artist.id} />
+    </Suspense>
+  );
+}
+
+function Albums({ artistId }) {
+  const albums = React.use(fetchData(`/${artistId}/albums`));
+  return (
+    <ul>
+      {albums.map((album) => (
+        <li key={album.id}>
+          {album.title} ({album.year})
+        </li>
+      ))}
+    </ul>
+  );
+}
+```
+
+:::tip[那么问题来了]
+`Albums` 是个同步函数（返回的不是 `Promise`），那为啥 `Suspense` 能够知道 `Albums` 组件内 `Promise` 状态呢？
+:::
+
+```javascript
+function getBaiduText() {
+  return window.fetch('https://www.baidu.com/');
+}
+
+function main() {
+  console.log('run main');
+  const text1 = getBaiduText();
+  console.log('getBaiduText 1:', text1);
+  const text2 = getBaiduText();
+  console.log('getBaiduText 2:', text2);
+}
+
+function run(func) {
+  /************************** 保存旧的 fetch ****************************/
+  const oldFetch = window.fetch;
+
+  /************************** 重写 fetch ****************************/
+  const cache = {
+    status: '', // '' | 'pending' | 'fulfilled' | 'rejected'
+    value: null,
+  };
+
+  const newFetch = (...args) => {
+    if (cache.status === 'fulfilled') return cache.value;
+    if (cache.status === 'rejected') throw new Error(cache.value);
+    const p = oldFetch(...args)
+      .then((res) => {
+        return res.text();
+      })
+      .then((res) => {
+        cache.status = 'fulfilled';
+        cache.value = res;
+      })
+      .catch((err) => {
+        cache.status = 'rejected';
+        cache.value = err;
+      });
+    throw p;
+  };
+
+  window.fetch = newFetch;
+
+  /************************** 执行函数 ****************************/
+  try {
+    func();
+  } catch (error) {
+    if (error instanceof Promise) {
+      error.finally(() => {
+        window.fetch = newFetch;
+        func();
+        window.fetch = oldFetch;
+      });
+    }
+  }
+
+  /************************** 恢复 fetch ****************************/
+  window.fetch = oldFetch;
+}
+
+run(main);
+```
+
+<ShowResult
+  client:only
+  result={`
+   console.log('getBaiduText 1:', text1);
+   console.log('getBaiduText 2:', text1);
+`}
+/>

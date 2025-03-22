@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { Button } from './Button';
 
-export const Countdown = () => {
+export const Countdown: ClientComponent = () => {
   const [time, setTime] = useState(0);
 
   const startTime = useRef(Date.now());
